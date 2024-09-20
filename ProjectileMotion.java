@@ -9,7 +9,7 @@
  * 
  */
 
-import javax.swing.JOptionPane; // needed for the JOption pane class
+import javax.swing.JOptionPane; // needed for the JOptionPane class
 
 public class ProjectileMotion {
     /**
@@ -28,7 +28,10 @@ public class ProjectileMotion {
          */
         final int GRAVITATION = 32;
 
-        // the distance in feet of to the desired target (input)
+        /*
+         * the distance in feet of the projectile to
+         * the desired target (input)
+         */
         final double distanceToTarget;
 
         // the projectile's initial velocity in ft/sec (input)
