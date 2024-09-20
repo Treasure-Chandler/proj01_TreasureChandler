@@ -43,7 +43,8 @@ public class ProjectileMotion {
         // the value in radians of the angle (calculated)
         double radian;
 
-        /* the projectile's time in flight as defined by formula 1
+        /* 
+         * the projectile's time in flight as defined by formula 1
          * (calculated)
          */
         double flightTime;
@@ -56,7 +57,8 @@ public class ProjectileMotion {
          */
         double distanceTraveled;
 
-        /* the value of the difference between the distance travelled
+        /* 
+         * the value of the difference between the distance travelled
          * and the distance to the target (calculated)
          */
         double error;
