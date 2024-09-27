@@ -3,8 +3,8 @@
  * CS 16000-01 - 03, Fall Semester 2024
  * Project 1: Compute the Projectile Motion
  * 
- * Description: The purpose of this class is to understand the
- * laws of physics and the fundamentals of projectile motion
+ * Description: The purpose of this Java class is to understand
+ * the laws of physics and the fundamentals of projectile motion
  * witin a Java program.
  * 
  */
@@ -18,12 +18,13 @@ public class ProjectileMotion {
      */
     public static void main(String[] args) {
         // variables declaration
-        /* the "final" keyword is used for
-         * immutable variables, and ALL CAPS
-         * are used for constant variables
+        /* 
+         * note: the "final" keyword is used
+         * for immutable variables, and ALL
+         * CAPS are used for constant variables
          */
-
-        /* the immutable and constant variable for the
+        /*
+         * the immutable and constant variable for the
          * projectile's gravitation
          */
         final int GRAVITATION = 32;
@@ -51,6 +52,7 @@ public class ProjectileMotion {
 
         // the projectile's maximum point in flight (calculated)
         double highestPoint;
+        
         /*
          * the projectile's distance traveled while in flight as
          * defined by formula 3 (calculated)
