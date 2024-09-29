@@ -9,7 +9,7 @@
  * 
  */
 
-import javax.swing.JDialog;
+import javax.swing.JDialog; // needed for the JOptionPane class
 import javax.swing.JOptionPane; // needed for the JOptionPane class
 
 public class ProjectileMotion {
