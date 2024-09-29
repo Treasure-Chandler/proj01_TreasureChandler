@@ -9,12 +9,13 @@
  * 
  */
 
+import javax.swing.JDialog;
 import javax.swing.JOptionPane; // needed for the JOptionPane class
 
 public class ProjectileMotion {
     /**
      * 
-     * @param args
+     * @param args      entered values
      */
     public static void main(String[] args) {
         // variables declaration
@@ -88,19 +89,93 @@ public class ProjectileMotion {
 
         /* 
          * string variables meant to be used for the
-         * dialogue boxes
+         * dialog boxes
          */
-        String task, task1, title;
+        String range, task, title;
 
-        nosOfAttempts = 1;
-        while (nosOfAttempts < MAX_NOS_OF_ATTEMPTS) {
-            nosOfAttempts ++;
-        } // end of while (nosOfAttempts < MAX_NOS_OF_ATTEMPTS)
+        /*
+         * due to the JOptionPane dialogue boxes sometimes appearing behind
+         * all of your windows, you will need to declare a JDialog and
+         * setAlwaysOnTop to true
+         */
+        final JDialog dialog = new JDialog();
+        dialog.setAlwaysOnTop(true);
+
+        // prompts the user to input the distance to the desired target
+        task = "Enter distance to target in feet:";
+        distanceToTarget = Double.parseDouble(JOptionPane.showInputDialog(dialog, task));
+
+        // prompts the user to input the initial velocity in ft/s
+        task = "Enter initial velocity in feet/sec:";
+        initialVelocity = Double.parseDouble(JOptionPane.showInputDialog(dialog, task));
+
+        // prompts the user to input the launch angle in degrees
+        task = "Enter the launch angle in degrees." + 
+               "\nThe initial input must be a 45 degree angle:";
+        launchAngle = Double.parseDouble(JOptionPane.showInputDialog(dialog, task));
+
+        // creates calculations to display in a new dialog window
+        flightTime = (2 * initialVelocity * Math.sin((launchAngle * Math.PI) / 180) 
+                     / GRAVITATION);
+        highestPoint = (initialVelocity * Math.sin((launchAngle * Math.PI) / 180) 
+                       * (flightTime / 2) - (.5 * GRAVITATION * ((flightTime/2) 
+                       * (flightTime / 2))));
+        distanceTraveled = (initialVelocity * Math.cos((launchAngle * Math.PI) / 180)
+                           * flightTime);
+        error = distanceTraveled - distanceToTarget;
+
+        trajectoryDataReport(initialVelocity, launchAngle, flightTime, 
+                             highestPoint, distanceTraveled, error);
+
+        // nosOfAttempts = 1;
+        // while (nosOfAttempts < MAX_NOS_OF_ATTEMPTS) {
+        //     nosOfAttempts ++;
+        // } // end of while (nosOfAttempts < MAX_NOS_OF_ATTEMPTS)
 
         System.exit(0);
     } // end of main()
 
-    // public static double reenterLaunchAngle(int nosOfAttempts){
+    /**
+     * 
+     * @param initialVelocity     // projectile's initial velocity (ft/s)  
+     * @param launchAngle         // current input for launch angle (degrees)
+     * @param flightTime          // flight time of the projectile (seconds)
+     * @param highestPoint        // maximum height of the projectile (feet)
+     * @param distanceTraveled    // distance travelled byt he projectile (feet)
+     * @param error               // difference between distance traveled and
+     *                            // distance to the target (feet)
+     */
+    public static void trajectoryDataReport(double initialVelocity,
+                                            double launchAngle,
+                                            double flightTime,
+                                            double highestPoint,
+                                            double distanceTraveled,
+                                            double error) {
+        /*
+         * due to the JOptionPane dialogue boxes sometimes appearing behind
+         * all of your windows, you will need to declare a JDialog and
+         * setAlwaysOnTop to true
+         */
+        final JDialog dialog = new JDialog();
+        dialog.setAlwaysOnTop(true);
+
+        // prints calculations in the window
+        String title = "Trajectory Data Report";
+        String range =  String.format("Initial velocity: %.2f ft/s\n" +
+                                      "Launch angle: %.2f degrees\n" +
+                                      "Flight time: %.2f seconds\n" +
+                                      "Maximum height: %.2f feet\n" +
+                                      "Distance traveled: %.2f feet\n" +
+                                      "Target missed by: %.2f feet\n",
+                                      initialVelocity, launchAngle,
+                                      flightTime, highestPoint,
+                                      distanceTraveled, error);
+        JOptionPane.showMessageDialog(dialog, range, title,
+                                      JOptionPane.INFORMATION_MESSAGE);
+
+    }
+
+    // public static double reenterLaunchAngle(int nosOfAttempts) {
     //     String task = "";
     //     String title = "";
     //     /*
