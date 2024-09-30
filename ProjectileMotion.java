@@ -79,13 +79,19 @@ public class ProjectileMotion {
          * count the number of attempts, including the initial attempt as
          * the first attempt
          */
-        int nosOfAttempts = 0;
+        int nosOfAttempts = 1;
 
         /*
          * a constant final variable to specify 5 as the maximum number
          * of attempts
          */
         final int MAX_NOS_OF_ATTEMPTS = 5;
+
+        /*
+         * to record the number of attempts of input for the launch
+         * angle
+         */
+        String attempt = "Intial Attempt";
 
         /* 
          * string variables meant to be used for the
@@ -108,29 +114,103 @@ public class ProjectileMotion {
         // prompts the user to input the initial velocity in ft/s
         task = "Enter initial velocity in feet/sec:";
         initialVelocity = Double.parseDouble(JOptionPane.showInputDialog(dialog, task));
+        // checks for the user's input regarding the initial velocity
+        if (initialVelocity < 210) {
+            JOptionPane.showMessageDialog(dialog,
+                                          "Target is too far!\n" +
+                                          "Restart the program with greater " +
+                                          "initial velocity!", 
+                                          "Modification Needed (Initial Attempt)",
+                                          JOptionPane.ERROR_MESSAGE);
+            System.exit(0);
+        }
 
         // prompts the user to input the launch angle in degrees
         task = "Enter the launch angle in degrees." + 
                "\nThe initial input must be a 45 degree angle:";
         launchAngle = Double.parseDouble(JOptionPane.showInputDialog(dialog, task));
+        nosOfAttempts += 1;
+        // checks for the user's input regarding the launch angle
+        if (launchAngle < 45) {
+            JOptionPane.showMessageDialog(dialog,
+                                          "Failed to enter 45 degrees on " +
+                                          "the 1st attempt.\n" +
+                                          "Restart the program with the " +
+                                          "initial launch angle of 45 degrees!",
+                                          "Modification Needed (Initial Attempt)",
+                                          JOptionPane.ERROR_MESSAGE);
+            System.exit(0);
+        }
 
         // creates calculations to display in a new dialog window
-        flightTime = (2 * initialVelocity * Math.sin((launchAngle * Math.PI) / 180) 
+        radian = (launchAngle * Math.PI) / 180;
+        flightTime = (2 * initialVelocity * Math.sin(radian) 
                      / GRAVITATION);
-        highestPoint = (initialVelocity * Math.sin((launchAngle * Math.PI) / 180) 
+        highestPoint = (initialVelocity * Math.sin(radian) 
                        * (flightTime / 2) - (.5 * GRAVITATION * ((flightTime/2) 
                        * (flightTime / 2))));
-        distanceTraveled = (initialVelocity * Math.cos((launchAngle * Math.PI) / 180)
+        distanceTraveled = (initialVelocity * Math.cos(radian)
                            * flightTime);
         error = distanceTraveled - distanceToTarget;
 
         trajectoryDataReport(initialVelocity, launchAngle, flightTime, 
                              highestPoint, distanceTraveled, error);
 
-        // nosOfAttempts = 1;
-        // while (nosOfAttempts < MAX_NOS_OF_ATTEMPTS) {
-        //     nosOfAttempts ++;
-        // } // end of while (nosOfAttempts < MAX_NOS_OF_ATTEMPTS)
+        // checks if the target was missed or not
+        if (error < 1 && error > -1) {
+            JOptionPane.showMessageDialog(dialog,
+                                          "The target is hit within an " +
+                                          " error of 1 foot!" +
+                                          "\nThe program terminates.",
+                                          "Missed Target",
+                                          JOptionPane.ERROR_MESSAGE);
+            System.out.println(String.format("Your best shot missed the " +
+                                             "target with %.2f feet", error));
+            System.exit(0);
+        }
+
+        while (nosOfAttempts < MAX_NOS_OF_ATTEMPTS) {
+            // enter the launch angle once again
+            reenterLaunchAngle(nosOfAttempts);
+
+            // re-calculate all trajectory data
+            radian = (launchAngle * Math.PI) / 180;
+            flightTime = (2 * initialVelocity * Math.sin(radian) 
+                          / GRAVITATION);
+            highestPoint = (initialVelocity * Math.sin(radian) 
+                            * (flightTime / 2) - (.5 * GRAVITATION * ((flightTime/2) 
+                            * (flightTime / 2))));
+            distanceTraveled = (initialVelocity * Math.cos(radian)
+                                * flightTime);
+            error = distanceTraveled - distanceToTarget;
+
+            // re-calculate the error and update the minumum error
+            error = distanceTraveled - distanceToTarget;
+            minError = distanceTraveled - distanceToTarget;
+            minError = Math.min(Math.abs(error), Math.abs(error));
+
+            // calls trajectoryDataReport()
+            trajectoryDataReport(initialVelocity, launchAngle, flightTime, 
+                                 highestPoint, distanceTraveled, error);
+
+            // reinforce the initial attempt with a launch angle of 45 degrees
+            if (launchAngle < 45) {
+                JOptionPane.showMessageDialog(dialog,
+                                              "Failed to enter 45 degrees on " +
+                                              "the 1st attempt.\n" +
+                                              "Restart the program with the " +
+                                              "initial launch angle of 45 degrees!",
+                                              "Modification Needed (Initial Attempt)",
+                                              JOptionPane.ERROR_MESSAGE);
+                System.exit(0);
+            }
+
+            // calls errorAnalysis()
+            errorAnalysis(attempt, error, minError, launchAngle);
+
+            // update the number of attempts
+            nosOfAttempts++;
+        } // end of while (nosOfAttempts < MAX_NOS_OF_ATTEMPTS)
 
         System.exit(0);
     } // end of main()
@@ -175,16 +255,89 @@ public class ProjectileMotion {
 
     }
 
-    // public static double reenterLaunchAngle(int nosOfAttempts) {
-    //     String task = "";
-    //     String title = "";
-    //     /*
-    //      * to record the number of attempts of input for the launch
-    //      * angle
-    //      */
-    //     String attempt;
+    /**
+     * 
+     * @param nosOfAttempts     // tracks the number of attempts for each set of inputs
+     * @return                  // returns the launch angle
+     */
+    public static double reenterLaunchAngle(int nosOfAttempts) {
+        // variables to modify the text in the JOptionPane dialogue boxes
+        String task = "Enter the launch angle in degrees:";
+        String title;
+        @SuppressWarnings("unused")
+        double launchAngle;
+        /*
+         * due to the JOptionPane dialogue boxes sometimes appearing behind
+         * all of your windows, you will need to declare a JDialog and
+         * setAlwaysOnTop to true
+         */
+        final JDialog dialog = new JDialog();
+        dialog.setAlwaysOnTop(true);
 
-    //     if (nosOfAttempts == 1) attempt = "Inifial attempt";
-    // } // end of reenterLaunchAngle(int nosOfAttempts)
+        // checks for the number of attempts
+        if (nosOfAttempts == 2) {
+            title = "Modified Input (2nd Attempt)";
+            return launchAngle = Double.parseDouble(JOptionPane.showInputDialog(dialog,
+                                                                                task,
+                                                                                title,
+                                                                                JOptionPane.QUESTION_MESSAGE));
+        } else if (nosOfAttempts == 3) {
+            title = "Modified Input (3rd Attempt)";
+            return launchAngle = Double.parseDouble(JOptionPane.showInputDialog(dialog,
+                                                                                task,
+                                                                                title,
+                                                                                JOptionPane.QUESTION_MESSAGE));
+        } else if (nosOfAttempts == 4) {
+            title = "Modified Input (4th Attempt)";
+            return launchAngle = Double.parseDouble(JOptionPane.showInputDialog(dialog,
+                                                                                task,
+                                                                                title,
+                                                                                JOptionPane.QUESTION_MESSAGE));
+        } else {
+            title = "Modified Input (5th Attempt)";
+            return launchAngle = Double.parseDouble(JOptionPane.showInputDialog(dialog,
+                                                                                task,
+                                                                                title,
+                                                                                JOptionPane.QUESTION_MESSAGE));
+        } // end of if statements
+    } // end of reenterLaunchAngle(int nosOfAttempts)
+
+    /**
+     * 
+     * @param attempt       // number of attempts recorded
+     * @param error         // difference between distance travelled and 
+     *                      // distance to the target (feet)
+     * @param minError      // stores the least absolute error
+     * @param launchAngle   // current input for launch angle (degrees)
+     */
+    public static void errorAnalysis(String attempt, double error,
+                                     double minError, double launchAngle) {
+        /*
+         * due to the JOptionPane dialogue boxes sometimes appearing behind
+         * all of your windows, you will need to declare a JDialog and
+         * setAlwaysOnTop to true
+         */
+        final JDialog dialog = new JDialog();
+        dialog.setAlwaysOnTop(true);
+        String shotBeyond = "Shot went beyond the target. " +
+                            "Decrease the launch angle from ";
+        String fellShort = "Shot fell short of the target. " +
+                           "Increase the launch angle from ";
+        if (error < 1 && error > -1) {
+        JOptionPane.showMessageDialog(dialog,
+                                     "The target is hit within an " +
+                                     " error of 1 foot!" +
+                                     "\nThe program terminates.",
+                                     "Missed Target",
+                                     JOptionPane.ERROR_MESSAGE);
+        System.out.println(String.format("Your best shot missed the " +
+                                        "target with %.2f feet", error));
+         System.exit(0);
+        } else if (error < -1) {
+            System.out.println(attempt + "\n" + fellShort + launchAngle + "!");
+        } else {
+            System.out.println(attempt + "\n" + shotBeyond + launchAngle + "!");
+        }
+    } // end of errorAnalysis(String attempt, double error, double minError, double launchAngle)
 
 } // end of ProjectileMotion
