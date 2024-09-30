@@ -171,7 +171,7 @@ public class ProjectileMotion {
 
         while (nosOfAttempts < MAX_NOS_OF_ATTEMPTS) {
             // enter the launch angle once again
-            reenterLaunchAngle(nosOfAttempts);
+            launchAngle = reenterLaunchAngle(nosOfAttempts);
 
             // re-calculate all trajectory data
             radian = (launchAngle * Math.PI) / 180;
