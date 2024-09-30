@@ -91,7 +91,7 @@ public class ProjectileMotion {
          * to record the number of attempts of input for the launch
          * angle
          */
-        String attempt = "Intial Attempt";
+        String attempt = "";
 
         /* 
          * string variables meant to be used for the
@@ -111,15 +111,17 @@ public class ProjectileMotion {
         task = "Enter distance to target in feet:";
         distanceToTarget = Double.parseDouble(JOptionPane.showInputDialog(dialog, task));
 
-        // prompts the user to input the initial velocity in ft/s
-        task = "Enter initial velocity in feet/sec:";
+        // prompts the user to input the initial velocity in ft/sec
+        task = "Enter initial velocity in ft/sec:";
         initialVelocity = Double.parseDouble(JOptionPane.showInputDialog(dialog, task));
         // checks for the user's input regarding the initial velocity
         if (initialVelocity < 210) {
             JOptionPane.showMessageDialog(dialog,
                                           "Target is too far!\n" +
-                                          "Restart the program with greater " +
-                                          "initial velocity!", 
+                                          "Restart the program with a greater " +
+                                          "initial velocity!\n" +
+                                          "Hint: The initial velocity should " +
+                                          " be at least 210 ft/sec", 
                                           "Modification Needed (Initial Attempt)",
                                           JOptionPane.ERROR_MESSAGE);
             System.exit(0);
@@ -165,12 +167,13 @@ public class ProjectileMotion {
                                           "Missed Target",
                                           JOptionPane.ERROR_MESSAGE);
             System.out.println(String.format("Your best shot missed the " +
-                                             "target with %.2f feet", error));
+                                             "target with %.2f feet.", error));
             System.exit(0);
         }
 
-        while (nosOfAttempts < MAX_NOS_OF_ATTEMPTS) {
-            // enter the launch angle once again
+        // emulates 4 more attempts in this while loop
+        while (nosOfAttempts <= MAX_NOS_OF_ATTEMPTS) {
+            // enter the launch angle again
             launchAngle = reenterLaunchAngle(nosOfAttempts);
 
             // re-calculate all trajectory data
@@ -193,24 +196,13 @@ public class ProjectileMotion {
             trajectoryDataReport(initialVelocity, launchAngle, flightTime, 
                                  highestPoint, distanceTraveled, error);
 
-            // reinforce the initial attempt with a launch angle of 45 degrees
-            if (launchAngle < 45) {
-                JOptionPane.showMessageDialog(dialog,
-                                              "Failed to enter 45 degrees on " +
-                                              "the 1st attempt.\n" +
-                                              "Restart the program with the " +
-                                              "initial launch angle of 45 degrees!",
-                                              "Modification Needed (Initial Attempt)",
-                                              JOptionPane.ERROR_MESSAGE);
-                System.exit(0);
-            }
-
             // calls errorAnalysis()
             errorAnalysis(attempt, error, minError, launchAngle);
 
             // update the number of attempts
             nosOfAttempts++;
-        } // end of while (nosOfAttempts < MAX_NOS_OF_ATTEMPTS)
+
+        } // end of while loop
 
         System.exit(0);
     } // end of main()
@@ -264,7 +256,6 @@ public class ProjectileMotion {
         // variables to modify the text in the JOptionPane dialogue boxes
         String task = "Enter the launch angle in degrees:";
         String title;
-        @SuppressWarnings("unused")
         double launchAngle;
         /*
          * due to the JOptionPane dialogue boxes sometimes appearing behind
@@ -300,6 +291,7 @@ public class ProjectileMotion {
                                                                                 title,
                                                                                 JOptionPane.QUESTION_MESSAGE));
         } // end of if statements
+
     } // end of reenterLaunchAngle(int nosOfAttempts)
 
     /**
@@ -319,25 +311,36 @@ public class ProjectileMotion {
          */
         final JDialog dialog = new JDialog();
         dialog.setAlwaysOnTop(true);
+
+        /*
+         * variables are created in the event of shots going beyond/falling
+         * short of the target
+         */
         String shotBeyond = "Shot went beyond the target. " +
                             "Decrease the launch angle from ";
         String fellShort = "Shot fell short of the target. " +
                            "Increase the launch angle from ";
+
+        /*
+         * checks if the target was missed, or if the target
+         * was too far or too short
+         */
         if (error < 1 && error > -1) {
         JOptionPane.showMessageDialog(dialog,
-                                     "The target is hit within an " +
+                                     "The target is hit within an" +
                                      " error of 1 foot!" +
                                      "\nThe program terminates.",
                                      "Missed Target",
                                      JOptionPane.ERROR_MESSAGE);
         System.out.println(String.format("Your best shot missed the " +
                                         "target with %.2f feet", error));
-         System.exit(0);
+        System.exit(0);
         } else if (error < -1) {
             System.out.println(attempt + "\n" + fellShort + launchAngle + "!");
         } else {
             System.out.println(attempt + "\n" + shotBeyond + launchAngle + "!");
-        }
+        } // end of if statements
+
     } // end of errorAnalysis(String attempt, double error, double minError, double launchAngle)
 
 } // end of ProjectileMotion
