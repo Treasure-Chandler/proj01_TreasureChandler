@@ -163,6 +163,7 @@ public class ProjectileMotion {
         distanceTraveled = (initialVelocity * Math.cos(radian)
                             * flightTime);
         error = distanceTraveled - distanceToTarget;
+        minError = Math.min(Math.abs(error), Math.abs(error));
 
         trajectoryDataReport(initialVelocity, launchAngle, flightTime, 
                              highestPoint, distanceTraveled, error);
@@ -176,7 +177,7 @@ public class ProjectileMotion {
                                           "Successful Attempt",
                                           JOptionPane.ERROR_MESSAGE);
             System.out.println(String.format("Your best shot missed the " +
-                                             "target by %.2f feet.", error));
+                                             "target by %.2f feet.", minError));
             System.exit(0);
         }
 
@@ -195,10 +196,10 @@ public class ProjectileMotion {
             distanceTraveled = (initialVelocity * Math.cos(radian)
                                 * flightTime);
             error = distanceTraveled - distanceToTarget;
+            minError = Math.min(Math.abs(error), Math.abs(error));
 
             // re-calculate the error and update the minumum error
             error = distanceTraveled - distanceToTarget;
-            minError = distanceTraveled - distanceToTarget;
             minError = Math.min(Math.abs(error), Math.abs(error));
 
             // calls trajectoryDataReport()
@@ -227,7 +228,7 @@ public class ProjectileMotion {
                                    "was unsuccessful. Restart the " +
                                    "program and try again.\n" +
                                    String.format("Your best shot missed the " +
-                                                 "target by %.2f feet.", error));
+                                                 "target by %.2f feet.", minError));
                 System.exit(0);
             }
 
@@ -347,6 +348,7 @@ public class ProjectileMotion {
      */
     public static void errorAnalysis(String attempt, double error, double minError,
                                      double launchAngle) {
+        minError = Math.min(Math.abs(error), Math.abs(error));
         /*
          * due to the JOptionPane dialogue boxes sometimes appearing behind
          * all of your windows, you will need to declare a JDialog and
@@ -378,7 +380,7 @@ public class ProjectileMotion {
                                      "Successful Attempt",
                                      JOptionPane.INFORMATION_MESSAGE);
         System.out.println(String.format("Your best shot missed the " +
-                                         "target by %.2f feet", error));
+                                         "target by %.2f feet", minError));
         System.exit(0);
         } else if (error < -1) {
             System.out.println(attempt + fellShort + launchAngle + "!");
