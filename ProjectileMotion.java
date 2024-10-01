@@ -70,7 +70,7 @@ public class ProjectileMotion {
          * the least absolute error; this updates every time a new error
          * value is generated (calculated)
          */
-        double minError;
+        double minError = 0;
 
         // the current output message built upon the trajectory data
         String trajectory;
@@ -88,7 +88,7 @@ public class ProjectileMotion {
         final int MAX_NOS_OF_ATTEMPTS = 5;
 
         // records the number of attempts of input for the launch angle
-        String attempt = "Attempt";
+        String attempt = "";
 
         /* 
          * string variables meant to be used for the
@@ -201,7 +201,15 @@ public class ProjectileMotion {
 
         } // end of while loop
 
-        if (nosOfAttempts > 5 && (error < 1 || error > -1)) {
+        if (nosOfAttempts == 2) {
+            attempt = "Second Attempt: ";
+        } else if (nosOfAttempts == 3) {
+            attempt = "Third Attempt: ";
+        } else if (nosOfAttempts == 4) {
+            attempt = "Fourth Attempt: ";
+        } else if (nosOfAttempts > 5 && (error < 1 || error > -1)) {
+            attempt = "Fifth Attempt: ";
+            errorAnalysis(attempt, error, minError, launchAngle);
             System.out.println("End of the fifth attempt, which " +
                                "was unsuccessful. Restart the " +
                                "program and try again.\n" +
@@ -343,9 +351,9 @@ public class ProjectileMotion {
                                          "target with %.2f feet", error));
         System.exit(0);
         } else if (error < -1) {
-            System.out.println(attempt + "\n" + fellShort + launchAngle + "!");
+            System.out.println(attempt + ": " + fellShort + launchAngle + "!");
         } else {
-            System.out.println(attempt + "\n" + shotBeyond + launchAngle + "!");
+            System.out.println(attempt + ": " + shotBeyond + launchAngle + "!");
         } // end of if statements
 
     } // end of errorAnalysis(String attempt, double error, double minError, double launchAngle)
