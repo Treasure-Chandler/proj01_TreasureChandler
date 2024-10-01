@@ -82,7 +82,7 @@ public class ProjectileMotion {
          * the least absolute error; this updates every time a new error
          * value is generated (calculated)
          */
-        double minError = 0;
+        double minError = Integer.MAX_VALUE;
 
         // the current output message built upon the trajectory data
         String trajectory;
@@ -180,7 +180,7 @@ public class ProjectileMotion {
                                              "target by %.2f feet.", minError));
             System.exit(0);
         }
-
+        
         // emulates 4 more attempts in this while loop
         while (nosOfAttempts <= MAX_NOS_OF_ATTEMPTS) {
             // enter the launch angle again
@@ -196,11 +196,9 @@ public class ProjectileMotion {
             distanceTraveled = (initialVelocity * Math.cos(radian)
                                 * flightTime);
             error = distanceTraveled - distanceToTarget;
-            minError = Math.min(Math.abs(error), Math.abs(error));
-
-            // re-calculate the error and update the minumum error
-            error = distanceTraveled - distanceToTarget;
-            minError = Math.min(Math.abs(error), Math.abs(error));
+            
+            // update the minumum error
+            minError = Math.min(minError, Math.abs(error));
 
             // calls trajectoryDataReport()
             trajectoryDataReport(initialVelocity, launchAngle, flightTime, 
@@ -348,7 +346,6 @@ public class ProjectileMotion {
      */
     public static void errorAnalysis(String attempt, double error, double minError,
                                      double launchAngle) {
-        minError = Math.min(Math.abs(error), Math.abs(error));
         /*
          * due to the JOptionPane dialogue boxes sometimes appearing behind
          * all of your windows, you will need to declare a JDialog and
