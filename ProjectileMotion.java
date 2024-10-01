@@ -196,27 +196,24 @@ public class ProjectileMotion {
             // calls errorAnalysis()
             errorAnalysis(attempt, error, minError, launchAngle);
 
+            if (nosOfAttempts == 2) {
+                attempt = "Second Attempt: ";
+            } else if (nosOfAttempts == 3) {
+                attempt = "Third Attempt: ";
+            } else if (nosOfAttempts == 4) {
+                attempt = "Fourth Attempt: ";
+            } else if (nosOfAttempts > 5 && (error < 1 || error > -1)) {
+                attempt = "Fifth Attempt: ";
+                errorAnalysis(attempt, error, minError, launchAngle);
+                System.out.printf("Your best shot missed the " +
+                                  "target with %.2f feet.", error);
+                System.exit(0);
+            }
+
             // update the number of attempts
             nosOfAttempts++;
 
         } // end of while loop
-
-        if (nosOfAttempts == 2) {
-            attempt = "Second Attempt: ";
-        } else if (nosOfAttempts == 3) {
-            attempt = "Third Attempt: ";
-        } else if (nosOfAttempts == 4) {
-            attempt = "Fourth Attempt: ";
-        } else if (nosOfAttempts > 5 && (error < 1 || error > -1)) {
-            attempt = "Fifth Attempt: ";
-            errorAnalysis(attempt, error, minError, launchAngle);
-            System.out.println("End of the fifth attempt, which " +
-                               "was unsuccessful. Restart the " +
-                               "program and try again.\n" +
-                               String.format("Your best shot missed the " +
-                                             "target with %.2f feet.", error));
-            System.exit(0);
-        }
 
         System.exit(0);
     } // end of main()
