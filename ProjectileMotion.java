@@ -5,7 +5,11 @@
  * 
  * Description: The purpose of this Java class is to understand
  * the laws of physics and the fundamentals of projectile motion
- * witin a Java program.
+ * witin a Java program. This class also simulates the process of
+ * repeated attempts to hit a target with a projectile. The closest
+ * distance one can get to hitting the target with said projectile is
+ * 0.01 (or even 0) feet away from the target, which is considered a 
+ * successful attempt.
  * 
  */
 
@@ -19,9 +23,10 @@ public class ProjectileMotion {
      */
 
     /*
-     * in VSCode (or any IDE), there will be warnings for some variables
-     * that have not been used (even though you can see they are changed)
-     * throughout the program; this line is to suppress those warnings
+     * in VSCode (or any IDE, VSCode is the one I use), there will be warnings
+     * for some variables that have not been used (even though you can see
+     * they are changed) throughout the program; this line is to suppress
+     * those warnings
      */
     @SuppressWarnings("unused")
     public static void main(String[] args) {
@@ -168,7 +173,7 @@ public class ProjectileMotion {
                                           "The target is hit within an " +
                                           " error of 1 foot, which means" +
                                           "\nThe program will terminate.",
-                                          "Missed Target",
+                                          "Successful Attempt",
                                           JOptionPane.ERROR_MESSAGE);
             System.out.println(String.format("Your best shot missed the " +
                                              "target by %.2f feet.", error));
@@ -234,6 +239,7 @@ public class ProjectileMotion {
 
         } // end of while loop
 
+        // needed for the JOptionPane class
         System.exit(0);
     } // end of main()
 
@@ -263,7 +269,7 @@ public class ProjectileMotion {
 
         // prints calculations in the window
         String title = "Trajectory Data Report";
-        String trajectory =  String.format("Initial velocity: %.2f ft/s\n" +
+        String trajectory =  String.format("Initial velocity: %.2f ft/sec\n" +
                                       "Launch angle: %.2f degrees\n" +
                                       "Flight time: %.2f seconds\n" +
                                       "Maximum height: %.2f feet\n" +
@@ -369,7 +375,7 @@ public class ProjectileMotion {
                                      " error of 1 foot, which means " +
                                      "this was a sucessful attempt! " +
                                      "\nThe program will terminate.",
-                                     "Missed Target",
+                                     "Successful Attempt",
                                      JOptionPane.INFORMATION_MESSAGE);
         System.out.println(String.format("Your best shot missed the " +
                                          "target by %.2f feet", error));
@@ -386,6 +392,22 @@ public class ProjectileMotion {
 
 /*
  * Data test with my own inputs of choice:
+ * Distance to target: 800 feet
  * 
+ * Initial attempt:
+ * Initial velocity: 210 ft/sec
+ * Launch angle: 45 degrees
+ * Flight time: 9.28 seconds
+ * Maximum height: 344.53 feet
+ * Distance traveled: 1378.12 feet
+ * Target missed by (error): 578.12 feet
  * 
+ * Second attempt (after lots of testing, this
+ * was the lowest possible error I could achieve):
+ * Initial velocity: 210 ft/sec
+ * Launch angle: 17.745 (rounded to 17.75) degrees
+ * Flight time: 4 seconds
+ * Maximum height: 64.01 feet
+ * Distance traveled: 800.09 feet
+ * Target missed by (error): 0.09 feet
  */
