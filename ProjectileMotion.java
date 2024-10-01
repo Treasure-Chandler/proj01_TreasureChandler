@@ -87,11 +87,8 @@ public class ProjectileMotion {
          */
         final int MAX_NOS_OF_ATTEMPTS = 5;
 
-        /*
-         * to record the number of attempts of input for the launch
-         * angle
-         */
-        String attempt = "";
+        // records the number of attempts of input for the launch angle
+        String attempt = "Attempt";
 
         /* 
          * string variables meant to be used for the
@@ -133,7 +130,7 @@ public class ProjectileMotion {
         launchAngle = Double.parseDouble(JOptionPane.showInputDialog(dialog, task));
         nosOfAttempts += 1;
         // checks for the user's input regarding the launch angle
-        if (launchAngle < 45) {
+        if (launchAngle < 45 || launchAngle > 45) {
             JOptionPane.showMessageDialog(dialog,
                                           "Failed to enter 45 degrees on " +
                                           "the 1st attempt.\n" +
@@ -203,6 +200,15 @@ public class ProjectileMotion {
             nosOfAttempts++;
 
         } // end of while loop
+
+        if (nosOfAttempts > 5 && (error < 1 || error > -1)) {
+            System.out.println("End of the fifth attempt, which " +
+                               "was unsuccessful. Restart the " +
+                               "program and try again.\n" +
+                               String.format("Your best shot missed the " +
+                                             "target with %.2f feet.", error));
+            System.exit(0);
+        }
 
         System.exit(0);
     } // end of main()
@@ -302,8 +308,8 @@ public class ProjectileMotion {
      * @param minError      // stores the least absolute error
      * @param launchAngle   // current input for launch angle (degrees)
      */
-    public static void errorAnalysis(String attempt, double error,
-                                     double minError, double launchAngle) {
+    public static void errorAnalysis(String attempt, double error, double minError,
+                                     double launchAngle) {
         /*
          * due to the JOptionPane dialogue boxes sometimes appearing behind
          * all of your windows, you will need to declare a JDialog and
@@ -323,7 +329,8 @@ public class ProjectileMotion {
 
         /*
          * checks if the target was missed, or if the target
-         * was too far or too short
+         * was too far or too short, along with printing the
+         * best shot
          */
         if (error < 1 && error > -1) {
         JOptionPane.showMessageDialog(dialog,
@@ -333,7 +340,7 @@ public class ProjectileMotion {
                                      "Missed Target",
                                      JOptionPane.ERROR_MESSAGE);
         System.out.println(String.format("Your best shot missed the " +
-                                        "target with %.2f feet", error));
+                                         "target with %.2f feet", error));
         System.exit(0);
         } else if (error < -1) {
             System.out.println(attempt + "\n" + fellShort + launchAngle + "!");
