@@ -17,6 +17,13 @@ public class ProjectileMotion {
      * 
      * @param args      entered values
      */
+
+    /*
+     * in VSCode (or any IDE), there will be warnings for some variables
+     * that have not been used (even though you can see they are changed)
+     * throughout the program; this line is to suppress those warnings
+     */
+    @SuppressWarnings("unused")
     public static void main(String[] args) {
         // variables declaration
         /* 
@@ -94,7 +101,7 @@ public class ProjectileMotion {
          * string variables meant to be used for the
          * dialog boxes
          */
-        String range, task, title;
+        String task, title;
 
         /*
          * due to the JOptionPane dialogue boxes sometimes appearing behind
@@ -146,10 +153,10 @@ public class ProjectileMotion {
         flightTime = (2 * initialVelocity * Math.sin(radian) 
                      / GRAVITATION);
         highestPoint = (initialVelocity * Math.sin(radian) 
-                       * (flightTime / 2) - (.5 * GRAVITATION * ((flightTime/2) 
-                       * (flightTime / 2))));
+                        * (flightTime / 2) - (.5 * GRAVITATION * ((flightTime/2) 
+                        * (flightTime / 2))));
         distanceTraveled = (initialVelocity * Math.cos(radian)
-                           * flightTime);
+                            * flightTime);
         error = distanceTraveled - distanceToTarget;
 
         trajectoryDataReport(initialVelocity, launchAngle, flightTime, 
@@ -159,12 +166,12 @@ public class ProjectileMotion {
         if (error < 1 && error > -1) {
             JOptionPane.showMessageDialog(dialog,
                                           "The target is hit within an " +
-                                          " error of 1 foot!" +
-                                          "\nThe program terminates.",
+                                          " error of 1 foot, which means" +
+                                          "\nThe program will terminate.",
                                           "Missed Target",
                                           JOptionPane.ERROR_MESSAGE);
             System.out.println(String.format("Your best shot missed the " +
-                                             "target with %.2f feet.", error));
+                                             "target by %.2f feet.", error));
             System.exit(0);
         }
 
@@ -193,22 +200,34 @@ public class ProjectileMotion {
             trajectoryDataReport(initialVelocity, launchAngle, flightTime, 
                                  highestPoint, distanceTraveled, error);
 
-            // calls errorAnalysis()
-            errorAnalysis(attempt, error, minError, launchAngle);
-
+            /*
+             * tracks the attempts to change the text of the "attempt"
+             * string
+             */
             if (nosOfAttempts == 2) {
                 attempt = "Second Attempt: ";
             } else if (nosOfAttempts == 3) {
                 attempt = "Third Attempt: ";
             } else if (nosOfAttempts == 4) {
                 attempt = "Fourth Attempt: ";
-            } else if (nosOfAttempts > 5 && (error < 1 || error > -1)) {
+            } else if (nosOfAttempts >= 5 && (error < 1 || error > -1)) {
                 attempt = "Fifth Attempt: ";
                 errorAnalysis(attempt, error, minError, launchAngle);
-                System.out.printf("Your best shot missed the " +
-                                  "target with %.2f feet.", error);
+                /*
+                 * if all of the attempts are still unsuccessful, the
+                 * error analysis will be run for the last time and
+                 * these messages will print in the console
+                 */
+                System.out.println("End of the fifth attempt, which " +
+                                   "was unsuccessful. Restart the " +
+                                   "program and try again.\n" +
+                                   String.format("Your best shot missed the " +
+                                                 "target by %.2f feet.", error));
                 System.exit(0);
             }
+
+            // calls errorAnalysis()
+            errorAnalysis(attempt, error, minError, launchAngle);
 
             // update the number of attempts
             nosOfAttempts++;
@@ -244,7 +263,7 @@ public class ProjectileMotion {
 
         // prints calculations in the window
         String title = "Trajectory Data Report";
-        String range =  String.format("Initial velocity: %.2f ft/s\n" +
+        String trajectory =  String.format("Initial velocity: %.2f ft/s\n" +
                                       "Launch angle: %.2f degrees\n" +
                                       "Flight time: %.2f seconds\n" +
                                       "Maximum height: %.2f feet\n" +
@@ -253,7 +272,7 @@ public class ProjectileMotion {
                                       initialVelocity, launchAngle,
                                       flightTime, highestPoint,
                                       distanceTraveled, error);
-        JOptionPane.showMessageDialog(dialog, range, title,
+        JOptionPane.showMessageDialog(dialog, trajectory, title,
                                       JOptionPane.INFORMATION_MESSAGE);
 
     }
@@ -263,6 +282,13 @@ public class ProjectileMotion {
      * @param nosOfAttempts     // tracks the number of attempts for each set of inputs
      * @return                  // returns the launch angle
      */
+
+    /*
+     * in VSCode (or any IDE), there will be warnings for some variables
+     * that have not been used (even though you can see they are changed)
+     * throughout the program; this line is to suppress those warnings
+     */
+    @SuppressWarnings("unused")
     public static double reenterLaunchAngle(int nosOfAttempts) {
         // variables to modify the text in the JOptionPane dialogue boxes
         String task = "Enter the launch angle in degrees:";
@@ -340,19 +366,26 @@ public class ProjectileMotion {
         if (error < 1 && error > -1) {
         JOptionPane.showMessageDialog(dialog,
                                      "The target is hit within an" +
-                                     " error of 1 foot!" +
-                                     "\nThe program terminates.",
+                                     " error of 1 foot, which means " +
+                                     "this was a sucessful attempt! " +
+                                     "\nThe program will terminate.",
                                      "Missed Target",
-                                     JOptionPane.ERROR_MESSAGE);
+                                     JOptionPane.INFORMATION_MESSAGE);
         System.out.println(String.format("Your best shot missed the " +
-                                         "target with %.2f feet", error));
+                                         "target by %.2f feet", error));
         System.exit(0);
         } else if (error < -1) {
-            System.out.println(attempt + ": " + fellShort + launchAngle + "!");
+            System.out.println(attempt + fellShort + launchAngle + "!");
         } else {
-            System.out.println(attempt + ": " + shotBeyond + launchAngle + "!");
+            System.out.println(attempt + shotBeyond + launchAngle + "!");
         } // end of if statements
 
     } // end of errorAnalysis(String attempt, double error, double minError, double launchAngle)
 
 } // end of ProjectileMotion
+
+/*
+ * Data test with my own inputs of choice:
+ * 
+ * 
+ */
