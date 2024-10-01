@@ -80,7 +80,8 @@ public class ProjectileMotion {
 
         /* 
          * the least absolute error; this updates every time a new error
-         * value is generated (calculated)
+         * value is generated (calculated, but initialized with a large
+         * number)
          */
         double minError = Integer.MAX_VALUE;
 
@@ -163,7 +164,7 @@ public class ProjectileMotion {
         distanceTraveled = (initialVelocity * Math.cos(radian)
                             * flightTime);
         error = distanceTraveled - distanceToTarget;
-        minError = Math.min(Math.abs(error), Math.abs(error));
+        minError = Math.min(minError, Math.abs(error));
 
         trajectoryDataReport(initialVelocity, launchAngle, flightTime, 
                              highestPoint, distanceTraveled, error);
