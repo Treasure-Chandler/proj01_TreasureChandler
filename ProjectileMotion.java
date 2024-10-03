@@ -19,7 +19,7 @@ import javax.swing.JOptionPane; // needed for the JOptionPane class
 public class ProjectileMotion {
     /**
      * 
-     * @param args      entered values
+     * @param args     // entered values
      */
 
     /*
