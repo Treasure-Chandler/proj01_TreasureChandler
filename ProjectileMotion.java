@@ -83,7 +83,7 @@ public class ProjectileMotion {
          * value is generated (calculated, but initialized with a large
          * number)
          */
-        double minError = Integer.MAX_VALUE;
+        double minError = Double.MAX_VALUE;
 
         // the current output message built upon the trajectory data
         String trajectory;
